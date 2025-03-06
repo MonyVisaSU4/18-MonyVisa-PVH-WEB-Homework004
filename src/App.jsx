@@ -4,33 +4,40 @@ import DashboardComponent from "./components/DashboardComponent";
 import LearningMaterialsComponent from "./components/LearningMaterialsComponent";
 import SidebarComponent from "./components/SidebarComponent";
 import TopNavbarComponent from "./components/TopNavbarComponent";
+import AddNewProjectComponent from "./components/AddNewProjectComponent";
+import FilterComponent from "./components/FilterComponent";
+import CardCompo from "./components/CardComponent";
 
 function App() {
   return (
     <>
-      <div className="font-rubik text-primary-text bg-light-gray flex h-screen overflow-hidden">
-        {/* sidebar */}
-        <div className="w-1/5">
-          <SidebarComponent />
-        </div>
-
-        {/* top navigation bar */}
-        <div className="w-4/5 p-12">
-          <TopNavbarComponent />
-
-          {/* dashboard summary */}
-          <div className="flex justify-between">
-            <div className="w-9/12 mt-5 space-y-5">
-              <DashboardComponent />
-              <AssignmentsComponent />
-            </div>
-
-            <div className="w-3/12 pl-10 mt-5">
-              <LearningMaterialsComponent />
+      <div id="Container" className="grid grid-cols-12">
+          <div id="LContain" className="col-span-3"><SidebarComponent/></div>
+          <div id="RContain" className="col-span-9">
+            <div className="pt-[2%] pl-[3%]">
+              <div id="U-RContain"><TopNavbarComponent/></div>
+              <div id="B-RContain" className="grid grid-cols-12">
+                <div id="L-B-RContain" className="col-span-10">
+                  <div className="pt-[2%] pr-[5%]">
+                    <div id="U-L-B-RContain"><DashboardComponent/></div>
+                    <div id="B-L-B-RContain" className="flex justify-between pt-[5%]">
+                      <div className="relative">
+                        <div id="Assignment"><AssignmentsComponent/></div>
+                        <div>
+                          <div id="card" className="scale-[0.7] w-full"><CardCompo/></div>
+                        </div>
+                      </div>
+                      <div id="AbsoluteItem"><AddNewProjectComponent/></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="pt-[20%]">
+                  <div id="R-B-RContain" className="col-span-2"><LearningMaterialsComponent/></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
     </>
   );
 }

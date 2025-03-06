@@ -1,13 +1,62 @@
 import { Plus } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 
 export default function AddNewProjectComponent() {
+  const [formData, setFormData] = useState({
+    projectName: "",
+    dueDate: "",
+    progress: "",
+    description: "",
+  });
+
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    setErrorMessage("");
+  };
+
+  const validateForm = () => {
+    if (!formData.projectName.trim() || !formData.dueDate || !formData.progress) {
+      setErrorMessage("Please fill in all required fields.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (validateForm()) {
+      const updatedFormData = {
+        ...formData,
+        description: formData.description.trim()
+          ? formData.description
+          : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque nisi nec lorem tincidunt, vel aliquam justo cursus.",
+      };
+
+      console.log("Form Submitted:", updatedFormData);
+
+      setFormData({
+        projectName: "",
+        dueDate: "",
+        progress: "",
+        description: "",
+      });
+      setErrorMessage("");
+    }
+  };
+
   return (
     <div>
       <button
         data-modal-target="crud-modal"
         data-modal-toggle="crud-modal"
-        className=" text-white bg-custom-sky-blue hover:bg-custom-sky-blue-500 focus:ring-3 focus:outline-none focus:ring-custom-sky-blue-500  font-medium rounded-lg text-sm px-3 py-2.5 text-center dark:bg-custom-sky-blue-500 dark:hover:bg-custom-sky-blue-500  dark:focus:ring-custom-sky-blue-500  flex items-center gap-2"
+        className="text-white bg-custom-sky-blue hover:bg-custom-sky-blue-500 focus:ring-3 focus:outline-none focus:ring-custom-sky-blue-500 font-medium rounded-lg text-sm px-3 py-2.5 text-center dark:bg-custom-sky-blue-500 dark:hover:bg-custom-sky-blue-500 dark:focus:ring-custom-sky-blue-500 flex items-center gap-2"
         type="button"
       >
         <Plus size={22} /> <span className="text-base">New Project</span>
@@ -48,7 +97,12 @@ export default function AddNewProjectComponent() {
                 <span className="sr-only">Close modal</span>
               </button>
             </div>
-            <form className="p-4 md:p-5">
+            <form onSubmit={handleSubmit} className="p-4 md:p-5">
+              {/* Display error message */}
+              {errorMessage && (
+                <p className="text-red-500 text-sm mb-4">{errorMessage}</p>
+              )}
+
               <div className="grid gap-4 mb-4 grid-cols-2">
                 <div className="col-span-2">
                   <label
@@ -61,9 +115,10 @@ export default function AddNewProjectComponent() {
                     type="text"
                     name="projectName"
                     id="projectName"
+                    value={formData.projectName}
+                    onChange={handleInputChange}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Type Project Name"
-                    required
                   />
                 </div>
 
@@ -78,8 +133,9 @@ export default function AddNewProjectComponent() {
                     type="date"
                     name="dueDate"
                     id="dueDate"
+                    value={formData.dueDate}
+                    onChange={handleInputChange}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    required
                   />
                 </div>
 
@@ -92,15 +148,19 @@ export default function AddNewProjectComponent() {
                   </label>
                   <select
                     id="progress"
+                    name="progress"
+                    value={formData.progress}
+                    onChange={handleInputChange}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   >
-                    <option defaultValue="">Select Progress</option>
+                    <option value="">Select Progress</option>
                     <option value="100">100</option>
                     <option value="75">75</option>
                     <option value="50">50</option>
                     <option value="25">25</option>
                   </select>
                 </div>
+
                 <div className="col-span-2">
                   <label
                     htmlFor="description"
@@ -110,7 +170,10 @@ export default function AddNewProjectComponent() {
                   </label>
                   <textarea
                     id="description"
+                    name="description"
                     rows="4"
+                    value={formData.description}
+                    onChange={handleInputChange}
                     className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Write product description here"
                   ></textarea>
@@ -119,6 +182,11 @@ export default function AddNewProjectComponent() {
               <div className="text-right">
                 <button
                   type="submit"
+                  disabled={
+                    !formData.projectName ||
+                    !formData.dueDate ||
+                    !formData.progress
+                  }
                   className="text-white inline-flex items-center bg-custom-sky-blue hover:bg-custom-sky-blue-500 focus:ring-4 focus:outline-none focus:ring-custom-sky-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-custom-sky-blue-500 dark:hover:bg-custom-sky-blue-500 dark:focus:ring-custom-sky-blue-500"
                 >
                   Create

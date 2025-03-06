@@ -8,20 +8,17 @@ export default function DashboardComponent() {
 
       {/* display summary on each card */}
       <div className="flex gap-5">
-        {dashboard?.map((d) => (
-          <div
-            key={d?.id}
-            className="flex bg-white gap-5 py-3.5 px-4 rounded-xl w-full"
-          >
-            <div className={`${d?.color} p-3 rounded-xl`}>
-              <img src={d.icon} alt="file icon" />
+        {dashboard.map((inform=>(
+          <div className="flex bg-white gap-5 py-3.5 px-4 rounded-xl w-auto">
+            <div className={`p-1 rounded-xl ${inform.color}`}>
+              <img src={inform.icon} alt="file icon" className="w-10 h-10"/>
             </div>
             <div>
-              <p className="text-xl font-semibold">{d?.totalTasks}</p>
-              <p className="text-gray-400">{d?.label}</p>
+              <p className="text-xl font-semibold">{inform.totalTasks}</p>
+              <p className="text-gray-400">{inform.label}</p>
             </div>
           </div>
-        ))}
+        )))}
       </div>
     </div>
   );
