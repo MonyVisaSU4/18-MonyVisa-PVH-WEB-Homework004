@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Star } from "lucide-react";
 import FilterComponent from "./FilterComponent";
 import { learningMaterials as initialMaterials } from "../data/learningMaterials";
 
 export default function LearningMaterialsComponent() {
-  // State to manage the learning materials
+  // State to manage the learning materials and sort option
   const [materials, setMaterials] = useState(initialMaterials);
+  const [sortOption, setSortOption] = useState("A-Z");
 
   // Function to handle star click
   const handleStarClick = (id) => {
@@ -16,10 +17,29 @@ export default function LearningMaterialsComponent() {
     setMaterials(updatedMaterials);
   };
 
+  // Function to handle sort option change
+  const handleSortChange = (option) => {
+    setSortOption(option);
+  };
+
+  // Sort materials based on the selected option
+  useEffect(() => {
+    const sortedMaterials = [...materials].sort((a, b) => {
+      if (sortOption === "A-Z") {
+        return a.title.localeCompare(b.title);
+      } else if (sortOption === "Z-A") {
+        return b.title.localeCompare(a.title);
+      }
+      return 0;
+    });
+    
+    setMaterials(sortedMaterials);
+  }, [sortOption]);
+
   return (
     <div className="bg-white drop-shadow-lg rounded-2xl overflow-auto h-[80vh] w-[21vw]">
-      {/* Calling filter component */}
-      <FilterComponent />
+      {/* Calling filter component with sort handler */}
+      <FilterComponent onSortChange={handleSortChange} currentSortOption={sortOption} />
 
       {/* Title */}
       <div className="p-4 flex justify-between items-center">
@@ -62,3 +82,5 @@ export default function LearningMaterialsComponent() {
     </div>
   );
 }
+
+
